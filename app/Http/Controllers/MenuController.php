@@ -15,7 +15,7 @@ class MenuController extends Controller
      */
     public function index()
     {
-        //
+        return view('menu', ['menulist' => Menu::whereNull('parent_id')->get()]);
     }
 
     /**
@@ -36,7 +36,8 @@ class MenuController extends Controller
      */
     public function store(StoreMenuRequest $request)
     {
-        //
+        Menu::create($request->validated());
+        return back();
     }
 
     /**
