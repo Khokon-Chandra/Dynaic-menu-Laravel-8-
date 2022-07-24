@@ -14,7 +14,8 @@ class MenuFactory extends Factory
     public function definition()
     {
         return [
-            //
+            "name" => $this->faker->word(),
+            "url" => $this->faker->url
         ];
     }
 }
