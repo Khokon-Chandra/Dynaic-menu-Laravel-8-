@@ -31,15 +31,39 @@
                             @foreach ($menulist as $item)
                                 <li>
                                     <span class="p-1 border d-block my-1 bg-light d-flex justify-content-between">
-                                        <span class="text">{{ $item->name }}</span>
-                                        <i class="fa fa-caret-down"></i>
+                                        <span class="text">
+                                            <i class="icon-move"></i>
+                                            {{ $item->name }}</span>
+                                        <a data-bs-toggle="collapse" href="#collapseExample{{ $item->id }}"
+                                            role="button" aria-expanded="false" aria-controls="collapseExample"><i
+                                                class="fa fa-caret-down"></i></a>
+
                                     </span>
+                                    <div class="collapse pl-3" id="collapseExample{{ $item->id }}">
+                                        <form class="p-3" action="{{ route('menus.update', $item->id) }}"
+                                            method="POST">
+                                            @csrf
+                                            @method('PUT')
+                                            <div class="input-group input-group-sm mb-3">
+                                                <span class="input-group-text">Menu Text</span>
+                                                <input type="text" class="form-control form-control-sm"
+                                                    value="{{ $item->name }}">
+                                            </div>
+                                            <div class="input-group input-group-sm mb-3">
+                                                <span class="input-group-text">Menu Url</span>
+                                                <input type="text" class="form-control form-control-sm"
+                                                    value="{{ $item->url }}">
+                                            </div>
+                                            <div class="text-end"><input type="submit" class="btn btn-outline-primary btn-sm" value="save"></div>
+
+                                        </form>
+                                    </div>
                                     <ul></ul>
                                 </li>
                             @endforeach
                         </ul>
                         <div class="my-3 text-center">
-                            <button class="btn btn-primary btn-sm">Update Menu</button>
+                            <button id="update_menu" class="btn btn-primary btn-sm">Update Menu</button>
                         </div>
                     </div>
                 </div>
@@ -63,6 +87,10 @@
                     _super($item, container);
                 }
             });
+
+            $(document).on('click','#update_menu',function(event){
+                let url = "{{ route('menus.updateAll') }}"
+            })
         </script>
     @endpush
 </x-app-layout>

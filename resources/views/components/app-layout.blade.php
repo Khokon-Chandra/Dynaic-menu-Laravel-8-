@@ -32,7 +32,7 @@
             position: absolute;
         }
         ul.sortableitem li{
-            cursor: pointer;
+           list-style-type: number;
         }
     </style>
 </head>

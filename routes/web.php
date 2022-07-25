@@ -20,3 +20,5 @@ Route::get('/', function () {
 
 
 Route::resource('/menus',MenuController::class);
+
+Route::post('/menus/update/all',[MenuController::class,'updateAll'])->name('menus.updateAll');
