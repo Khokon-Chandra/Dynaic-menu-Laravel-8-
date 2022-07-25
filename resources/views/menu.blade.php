@@ -31,6 +31,7 @@
         </div>
         <ul>[[children]]</ul>
     </li>
+    <li>[[endOfList]]</li>
 
     @php
         $MenuObject->setContent(ob_get_clean());
@@ -69,7 +70,7 @@
                 <div class="shadow p-3">
                     <ul class="sortableitem">
                         @foreach ($menulist as $item)
-                            {!! $MenuObject->htmlParser($item) !!}
+                            {!! $MenuObject->htmlParser($item)  !!}
                         @endforeach
                     </ul>
                     <div class="my-3 text-center">
@@ -78,7 +79,7 @@
                 </div>
             </div>
         </div>
-        <div id="serialize_output2"></div>
+        <div style="display: none" id="serialize_output2"></div>
     </div>
 
 

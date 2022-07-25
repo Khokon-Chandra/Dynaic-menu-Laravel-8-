@@ -20,23 +20,44 @@ class MenuController extends Controller
         $this->content = $content;
     }
 
-    public function htmlParser($item, $content = null)
+    public function htmlParser($item)
     {
-        if ($content == null) {
-            $content = $this->content;
-        }
+
+        $content = $this->content;
+
         $content = str_replace('[[name]]', $item->name, $content);
         $content = str_replace('[[id]]', $item->id, $content);
         $content = str_replace('[[url]]', $item->url, $content);
         $content = str_replace('[[route]]', route('menus.update', $item->id), $content);
+
         if ($item->children->count()) {
             foreach ($item->children as $child) {
-                $content = str_replace('[[children]]', $this->htmlParser($child), $content);
+                $content = str_replace('[[children]]', $this->parseChildren($child), $content);
             }
         } else {
             $content = str_replace('[[children]]', '', $content);
         }
 
+        return str_replace('<li>[[endOfList]]</li>', '', $content);
+    }
+
+
+    public function parseChildren($item)
+    {
+        $content = $this->content;
+
+        $content = str_replace('[[name]]', $item->name, $content);
+        $content = str_replace('[[id]]', $item->id, $content);
+        $content = str_replace('[[url]]', $item->url, $content);
+        $content = str_replace('[[route]]', route('menus.update', $item->id), $content);
+
+        if ($item->children->count()) {
+            foreach ($item->children as $child) {
+                $content = str_replace('[[children]]', $this->parseChildren($child), $content);
+            }
+        } else {
+            $content = str_replace('[[children]]', '', $content);
+        }
         return $content;
     }
     /**
