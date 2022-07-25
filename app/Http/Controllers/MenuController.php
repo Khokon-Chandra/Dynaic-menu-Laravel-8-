@@ -31,7 +31,7 @@ class MenuController extends Controller
         $content = str_replace('[[route]]', route('menus.update', $item->id), $content);
         if ($item->children->count()) {
             foreach ($item->children as $child) {
-                $content = str_replace('[[children]]', $this->htmlParser($child, $content), $content);
+                $content = str_replace('[[children]]', $this->htmlParser($child), $content);
             }
         } else {
             $content = str_replace('[[children]]', '', $content);
