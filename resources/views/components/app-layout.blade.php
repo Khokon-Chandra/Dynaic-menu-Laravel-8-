@@ -34,6 +34,9 @@
         ul.sortableitem li{
            list-style-type: number;
         }
+        ul.sortableitem i.fa-arrows-up-down-left-right{
+            cursor:move;
+        }
     </style>
 </head>
 
