@@ -38,9 +38,6 @@
     @endphp
 
 
-
-
-
     <div class="mt-5 p-3">
         <div class="row">
             <div class="col-md-3">
