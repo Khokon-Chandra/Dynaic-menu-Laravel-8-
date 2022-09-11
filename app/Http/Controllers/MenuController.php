@@ -11,55 +11,7 @@ use Illuminate\Http\Request;
 class MenuController extends Controller
 {
 
-    private $updatAbleRows = [];
-
-    public $content = '';
-
-    public function setContent($content)
-    {
-        $this->content = $content;
-    }
-
-    public function htmlParser($item)
-    {
-
-        $content = $this->content;
-
-        $content = str_replace('[[name]]', $item->name, $content);
-        $content = str_replace('[[id]]', $item->id, $content);
-        $content = str_replace('[[url]]', $item->url, $content);
-        $content = str_replace('[[route]]', route('menus.update', $item->id), $content);
-
-        if ($item->children->count()) {
-            foreach ($item->children as $child) {
-                $content = str_replace('[[children]]', $this->parseChildren($child), $content);
-            }
-        } else {
-            $content = str_replace('[[children]]', '', $content);
-        }
-
-        return str_replace('<li>[[endOfList]]</li>', '', $content);
-    }
-
-
-    public function parseChildren($item)
-    {
-        $content = $this->content;
-
-        $content = str_replace('[[name]]', $item->name, $content);
-        $content = str_replace('[[id]]', $item->id, $content);
-        $content = str_replace('[[url]]', $item->url, $content);
-        $content = str_replace('[[route]]', route('menus.update', $item->id), $content);
-
-        if ($item->children->count()) {
-            foreach ($item->children as $child) {
-                $content = str_replace('[[children]]', $this->parseChildren($child), $content);
-            }
-        } else {
-            $content = str_replace('[[children]]', '', $content);
-        }
-        return $content;
-    }
+    protected $updateAbleRows = [];
     /**
      * Display a listing of the resource.
      *
@@ -69,7 +21,7 @@ class MenuController extends Controller
     {
         return view('menu', [
             'MenuObject' => $this,
-            'menulist' => Menu::whereNull('parent_id')->orderBy('sequence')->get()
+            'menulist' => Menu::whereNull('parent_id')->orderBy('sequence','asc')->get()
         ]);
     }
 
@@ -96,7 +48,7 @@ class MenuController extends Controller
     public function update(UpdateMenuRequest $request, Menu $menu)
     {
         $menu->update($request->validated());
-        return back();
+        return response('Successfully updated',200);
     }
 
     /**
@@ -105,11 +57,13 @@ class MenuController extends Controller
 
     public function updateAll(Request $request)
     {
+        $this->updateAbleRows = [];
+
         foreach ($request->data as $key => $item) {
             $sequence = $key + 1;
             $parent_id = null;
 
-            $this->updatAbleRows[] = [
+            $this->updateAbleRows[] = [
                 'id' => $item['id'],
                 'parent_id' => $parent_id,
                 'sequence' => $sequence,
@@ -120,8 +74,7 @@ class MenuController extends Controller
             }
         }
 
-
-        foreach ($this->updatAbleRows as $row) {
+        foreach ($this->updateAbleRows as $row) {
             Menu::where('id', $row['id'])->update([
                 'parent_id' => $row['parent_id'],
                 'sequence' => $row['sequence']
@@ -136,7 +89,7 @@ class MenuController extends Controller
     {
         foreach ($data as $key => $item) {
             $sequence = $key + 1;
-            $this->updatAbleRows[] = [
+            $this->updateAbleRows[] = [
                 'id' => $item['id'],
                 'parent_id' => $parent_id,
                 'sequence' => $sequence,
